@@ -1,0 +1,18 @@
+{
+  "name": "wikijs-sitemap",
+  "version": "1.0.0",
+  "description": "Sitemap for Wiki.js",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["wikijs", "sitemap"],
+  "author": "Philip Okugbe",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "node-cron": "^3.0.2",
+    "pg": "^8.9.0"
+  }
+}
