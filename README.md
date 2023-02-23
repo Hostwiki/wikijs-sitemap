@@ -31,23 +31,18 @@ To use, you must be serving your Wiki.js instance over a reverse proxy server.
 #### .env config file content
 The service is exposed via port 3012 to avoid any port conflicts with Wiki.js.
 
-```
-DB_HOST=localhost
-DB_PORT=5432
-DB_USER=wikijs
-DB_PASS=wikijsrocks
-DB_NAME=wiki
-DB_SSL=false
-PORT=3012
-```
-
 #### Standalone Nodejs
 Edit the `.env` to include your database credential.  
 
-`git clone https://github.com/hostwiki/wikijs-sitemap`  
-`cd wikijs-sitemap`  
-Then run  
-`node server`  
+```bash
+git clone https://github.com/hostwiki/wikijs-sitemap
+cd wikijs-sitemap
+```
+
+Start the server with 
+```bash
+node server
+```  
 
 To keep the nodejs program running, you can use `pm2` or run it as a service.
 
@@ -66,12 +61,21 @@ You can find a Docker Compose example in the `example` directory.
 
 #### Docker create
 If you wish to run it via docker create:   
-`docker create --name=wiki-sitemap -e DB_HOST=db -e DB_PORT=5432 -e DB_PASS_FILE=/etc/wiki/.db-secret -v /etc/wiki/.db-secret:/etc/wiki/.db-secret:ro -e DB_USER=wiki -e DB_NAME=wiki --restart=unless-stopped --network=wikinet -p 3012:3000 hostwiki/wikijs-sitemap:1.0`  
-`docker start wikijs-sitemap`  
+```bash
+docker create --name=wiki-sitemap -e DB_HOST=db -e DB_PORT=5432 -e DB_PASS_FILE=/etc/wiki/.db-secret -v /etc/wiki/.db-secret:/etc/wiki/.db-secret:ro -e DB_USER=wiki -e DB_NAME=wiki --restart=unless-stopped --network=wikinet -p 3012:3000 hostwiki/wikijs-sitemap:1
+```  
+```bash
+docker start wikijs-sitemap
+````  
 
 #### Docker run
 If you wish to run it via docker run:  
-`docker run --name wiki-sitemap -e DB_HOST=db -e DB_PORT=5432 -e DB_PASS_FILE=/etc/wiki/.db-secret -v /etc/wiki/.db-secret:/etc/wiki/.db-secret:ro -e DB_USER=wiki -e DB_NAME=wiki --restart=unless-stopped --network=wikinet -p 3012:3000 -d hostwiki/wikijs-sitemap:1.0`
+```bash
+docker run --name wiki-sitemap -e DB_HOST=db -e DB_PORT=5432 -e DB_PASS_FILE=/etc/wiki/.db-secret -v /etc/wiki/.db-secret:/etc/wiki/.db-secret:ro -e DB_USER=wiki -e DB_NAME=wiki --restart=unless-stopped --network=wikinet -p 3012:3000 -d hostwiki/wikijs-sitemap:1
+```
+
+After a successful setup, the sitemap will be available at `localhost:3012/sitemap.xml`.
+Next, you have to proxy it via a reverse proxy server like Nginx or Apache.
 
 #### Reverse proxy configuration for Nginx
 
@@ -90,9 +94,11 @@ location /sitemap.xml {
 #### Reverse proxy configuration for Apache
 Make sure to install the necessary Apache mods.  
 
-`sudo a2enmod proxy proxy_http`  
+```bash
+sudo a2enmod proxy proxy_http
+```
 
-Then add this to your wikijs apache configuration file.  
+Then add this to your Wiki.js apache configuration file.  
 ```
 ProxyPreserveHost On
 ProxyPass /sitemap.xml http://localhost:3012/sitemap.xml
