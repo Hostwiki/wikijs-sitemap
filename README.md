@@ -37,6 +37,7 @@ Edit the `.env` to include your database credential.
 ```bash
 git clone https://github.com/hostwiki/wikijs-sitemap
 cd wikijs-sitemap
+npm ci install
 ```
 
 Start the server with 
