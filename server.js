@@ -37,8 +37,8 @@ const generateSitemapAndLog = () => {
     });
 };
 
-// generate this sitemap every hour
-cron.schedule('0 * * * *', generateSitemapAndLog);
+// generate this sitemap 24 hours
+cron.schedule('0 0 * * *', generateSitemapAndLog);
 
 let port = process.env.PORT || 3012;
 

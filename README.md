@@ -16,7 +16,7 @@ The sitemap can be accessed at: https://testwiki.hostwiki.io/sitemap.xml
 
 ### Limitations
 - Does not handle splitting the sitemap in the event of exceeding the 50,000 URL limit for sitemaps
-- It regenerates the sitemap hourly
+- It regenerates the sitemap every 24 hours (will be configurable in future updates)
 - Only supports postgres (need MYSQL or SQLite support? create an issue)
 
 #### Requirements
