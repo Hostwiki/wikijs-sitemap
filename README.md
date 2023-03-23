@@ -63,7 +63,7 @@ You can find a Docker Compose example in the `example` directory.
 #### Docker create
 If you wish to run it via docker create:   
 ```bash
-docker create --name=wikijs-sitemap -e DB_HOST=db -e DB_PORT=5432 -e DB_PASS_FILE=/etc/wiki/.db-secret -v /etc/wiki/.db-secret:/etc/wiki/.db-secret:ro -e DB_USER=wiki -e DB_NAME=wiki --restart=unless-stopped --network=wikinet -p 3012:3012 hostwiki/wikijs-sitemap:1
+docker create --name=wikijs-sitemap -e DB_HOST=db -e DB_PORT=5432 -e DB_PASS_FILE=/etc/wiki/.db-secret -v /etc/wiki/.db-secret:/etc/wiki/.db-secret:ro -e DB_USER=wiki -e DB_NAME=wiki --restart=unless-stopped --network=wikinet -p 3012:3012 hostwiki/wikijs-sitemap:latest
 ```  
 ```bash
 docker start wikijs-sitemap
@@ -72,7 +72,7 @@ docker start wikijs-sitemap
 #### Docker run
 If you wish to run it via docker run:  
 ```bash
-docker run --name wikijs-sitemap -e DB_HOST=db -e DB_PORT=5432 -e DB_PASS_FILE=/etc/wiki/.db-secret -v /etc/wiki/.db-secret:/etc/wiki/.db-secret:ro -e DB_USER=wiki -e DB_NAME=wiki --restart=unless-stopped --network=wikinet -p 3012:3012 -d hostwiki/wikijs-sitemap:1
+docker run --name wikijs-sitemap -e DB_HOST=db -e DB_PORT=5432 -e DB_PASS_FILE=/etc/wiki/.db-secret -v /etc/wiki/.db-secret:/etc/wiki/.db-secret:ro -e DB_USER=wiki -e DB_NAME=wiki --restart=unless-stopped --network=wikinet -p 3012:3012 -d hostwiki/wikijs-sitemap:latest
 ```
 
 After a successful setup, the sitemap will be available at `localhost:3012/sitemap.xml`.

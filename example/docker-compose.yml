@@ -29,7 +29,7 @@ services:
       - "3000:3000"
 
   wikijs-sitemap:
-    image: hostwiki/wikijs-sitemap:1
+    image: hostwiki/wikijs-sitemap:latest
     depends_on:
       - db
     environment:
