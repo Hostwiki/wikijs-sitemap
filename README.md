@@ -2,7 +2,8 @@
 
 This software allows you to generate a sitemap for your Wiki.js instance.  
 
-Currently, it only supports Postgres, but support for MySQL will be added if requested or if I have the time.  
+~~Currently, it only supports Postgres, but support for MySQL will be added if requested or if I have the time.~~  
+It supports both Postgres and MySQL.
 
 You can run it as a standalone Node.js program or within a Docker container.
 
@@ -17,12 +18,11 @@ The sitemap can be accessed at: https://testwiki.hostwiki.io/sitemap.xml
 ### Limitations
 - Does not handle splitting the sitemap in the event of exceeding the 50,000 URL limit for sitemaps
 - It regenerates the sitemap every 24 hours (will be configurable in future updates)
-- Only supports postgres (need MYSQL or SQLite support? create an issue)
+- ~~Only supports postgres (need MYSQL or SQLite support? create an issue)~~
 
 #### Requirements
-- Wiki.js (with Postgres)
+- Wiki.js (with Postgres or MySQL)
 - Reverse proxy (e.g Nginx, Apache)
-
 
 To use, you must be serving your Wiki.js instance over a reverse proxy server.
 
@@ -48,22 +48,25 @@ node server
 To keep the nodejs program running, you can use `pm2` or run it as a service.
 
 #### Docker
-Make sure to pass the correct environment variables.
+Make sure to pass the correct environment variables.  
+The `DB_TYPE` accepts `postgres` and `mysql` as variables. It defaults to `postgres` if not set.  
+You use `DB_PASS` or `DB_PASS_FILE` to set your database password.  
 ```
+-e DB_TYPE=postgres
 -e DB_HOST=
 -e DB_PORT=
--e DB_PASS_FILE= OR -e DB_PASS=
+-e DB_PASS=
 -e DB_USER=
 -e DB_NAME=
 ```
 
 ##### Docker Compose
-You can find a Docker Compose example in the `example` directory.
+You can find a Docker Compose examples for Postgres and MySQL in the `example` directory.  
 
 #### Docker create
 If you wish to run it via docker create:   
 ```bash
-docker create --name=wikijs-sitemap -e DB_HOST=db -e DB_PORT=5432 -e DB_PASS_FILE=/etc/wiki/.db-secret -v /etc/wiki/.db-secret:/etc/wiki/.db-secret:ro -e DB_USER=wiki -e DB_NAME=wiki --restart=unless-stopped --network=wikinet -p 3012:3012 hostwiki/wikijs-sitemap:latest
+docker create --name=wikijs-sitemap -e DB_TYPE=postgres -e DB_HOST=db -e DB_PORT=5432 -e DB_PASS_FILE=/etc/wiki/.db-secret -v /etc/wiki/.db-secret:/etc/wiki/.db-secret:ro -e DB_USER=wiki -e DB_NAME=wiki --restart=unless-stopped --network=wikinet -p 3012:3012 hostwiki/wikijs-sitemap:latest
 ```  
 ```bash
 docker start wikijs-sitemap
@@ -72,7 +75,7 @@ docker start wikijs-sitemap
 #### Docker run
 If you wish to run it via docker run:  
 ```bash
-docker run --name wikijs-sitemap -e DB_HOST=db -e DB_PORT=5432 -e DB_PASS_FILE=/etc/wiki/.db-secret -v /etc/wiki/.db-secret:/etc/wiki/.db-secret:ro -e DB_USER=wiki -e DB_NAME=wiki --restart=unless-stopped --network=wikinet -p 3012:3012 -d hostwiki/wikijs-sitemap:latest
+docker run --name wikijs-sitemap -e DB_TYPE=postgres -e DB_HOST=db -e DB_PORT=5432 -e DB_PASS_FILE=/etc/wiki/.db-secret -v /etc/wiki/.db-secret:/etc/wiki/.db-secret:ro -e DB_USER=wiki -e DB_NAME=wiki --restart=unless-stopped --network=wikinet -p 3012:3012 -d hostwiki/wikijs-sitemap:latest
 ```
 
 After a successful setup, the sitemap will be available at `localhost:3012/sitemap.xml`.

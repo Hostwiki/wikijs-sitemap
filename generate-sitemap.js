@@ -1,26 +1,28 @@
 const fs = require('fs');
-const { dbClient } = require('./config');
+
+const knex = require("knex");
+const knexConfig = require('./config');
+const db = knex(knexConfig);
 
 async function generateSitemap() {
-    const client = await dbClient();
 
-    const site_url = await client.query("SELECT * FROM public.settings WHERE key = 'host';");
+    const site_url = await db('settings')
+        .select('*')
+        .where('key', 'host')
+        .first();
 
-    const hostname = site_url.rows[0].value.v;
+    const hostname = site_url.value.v;
 
-    const pages_sql = 'SELECT id, path, title, "isPrivate", "isPublished", "updatedAt" ' +
-        'FROM public.pages WHERE "isPrivate" = false and "isPublished" = true';
+    const pages = await db('pages')
+        .select('id', 'path', 'title', 'isPrivate', 'isPublished', 'updatedAt')
+        .where({isPrivate: false, isPublished: true});
 
-    const pages = await client.query(pages_sql);
-
-    if (pages.rowCount > 0) {
-        const page_list = pages.rows;
-
+    if (pages.length > 0) {
         let sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n' +
             '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
             '<!-- Wiki.js sitemap generator by https://hostwiki.com -->\n';
 
-        page_list.forEach(function (page) {
+        pages.forEach(function (page) {
             const page_url = hostname + "/" + page.path;
             const last_update = page.updatedAt;
 
@@ -35,7 +37,7 @@ async function generateSitemap() {
         fs.writeFileSync('static/sitemap.xml', sitemap, 'utf-8');
     }
 
-    await client.end();
+    await db.destroy();
 }
 
 module.exports = generateSitemap;

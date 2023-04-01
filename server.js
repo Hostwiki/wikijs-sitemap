@@ -37,7 +37,7 @@ const generateSitemapAndLog = () => {
     });
 };
 
-// generate this sitemap 24 hours
+// generate sitemap every 24 hours
 cron.schedule('0 0 * * *', generateSitemapAndLog);
 
 let port = process.env.PORT || 3012;

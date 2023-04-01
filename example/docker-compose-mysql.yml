@@ -2,40 +2,41 @@ version: "3"
 services:
 
   db:
-    image: postgres:14-alpine
+    image: mysql:8.0
     environment:
-      POSTGRES_DB: wiki
-      POSTGRES_PASSWORD: wikijsrocks
-      POSTGRES_USER: wikijs
+      MYSQL_DATABASE: wiki
+      MYSQL_USER: wikijs
+      MYSQL_ROOT_PASSWORD: wikijsrocks
+      MYSQL_PASSWORD: wikijsrocks
     logging:
       driver: "none"
     restart: unless-stopped
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - mysql-db-data:/var/lib/mysql
 
   wiki:
     image: ghcr.io/requarks/wiki:2
     depends_on:
       - db
     environment:
-      DB_TYPE: postgres
+      DB_TYPE: mysql
       DB_HOST: db
-      DB_PORT: 5432
+      DB_PORT: 3306
       DB_USER: wikijs
       DB_PASS: wikijsrocks
       DB_NAME: wiki
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "3001:3000"
 
   wikijs-sitemap:
     image: hostwiki/wikijs-sitemap:latest
     depends_on:
       - db
     environment:
-      DB_TYPE: postgres
+      DB_TYPE: mysql
       DB_HOST: db
-      DB_PORT: 5432
+      DB_PORT: 3306
       DB_USER: wikijs
       DB_PASS: wikijsrocks
       DB_NAME: wiki
@@ -44,4 +45,4 @@ services:
       - "3012:3012"
 
 volumes:
-  db-data:
+  mysql-db-data:
