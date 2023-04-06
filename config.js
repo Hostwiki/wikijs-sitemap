@@ -1,5 +1,4 @@
 const isDocker = "is-docker";
-const { Client } = require('pg');
 const fs = require("fs");
 require('dotenv').config();
 
@@ -16,15 +15,16 @@ if (process.env.DB_PASS_FILE) {
     }
 }
 
-module.exports.dbClient = async () => {
-    const client = new Client({
+const knexConfig = {
+    client: process.env.DB_TYPE.toString().toLowerCase() === 'mysql' ? 'mysql2' : 'pg',
+    connection: {
         host: process.env.DB_HOST,
         port: process.env.DB_PORT,
         user: process.env.DB_USER,
         password: process.env.DB_PASS,
         database: process.env.DB_NAME,
         ssl: JSON.parse(process.env.DB_SSL),
-    });
-    await client.connect();
-    return client;
+    },
 };
+
+module.exports = knexConfig;
