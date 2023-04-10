@@ -24,7 +24,7 @@ const knexConfig = {
         user: process.env.DB_USER,
         password: process.env.DB_PASS,
         database: process.env.DB_NAME,
-        ssl: JSON.parse(process.env.DB_SSL),
+        ssl: process.env.DB_SSL ? JSON.parse(process.env.DB_SSL) : false,
     },
 };
 

@@ -42,7 +42,7 @@ services:
       DB_NAME: wiki
     restart: unless-stopped
     ports:
-      - "3012:3012"
+      - "3013:3012"
 
 volumes:
   mysql-db-data:
