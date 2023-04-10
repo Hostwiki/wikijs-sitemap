@@ -27,14 +27,28 @@ app.get('/sitemap.xml', (req, res) => {
     });
 });
 
-const generateSitemapAndLog = () => {
-    const time = new Date().toISOString();
+const sleep = (seconds) => new Promise((resolve) => setTimeout(resolve, seconds * 1000));
 
-    generateSitemap().then(() => {
-        console.log(`[${time}] sitemap generated successfully.`);
-    }).catch((error) => {
-        console.error(`[[${time}] Error generating sitemap: `, error);
-    });
+const generateSitemapAndLog = async () => {
+    const time = new Date().toISOString();
+    let retryCount = 0;
+    let sleepSeconds = 30;
+    let retryLimit = 10;
+
+    while (retryCount < retryLimit) {
+        try {
+            await generateSitemap();
+            console.log(`[${time}] sitemap generated successfully.`);
+            break;
+        } catch (error) {
+            console.error(`[[${time}] Error generating sitemap (attempt ${retryCount + 1}/${retryLimit}): `, error);
+            retryCount++;
+            if (retryCount < 10) {
+                await sleep(sleepSeconds);
+                // if not successful after 10 tries, it will not run again until the next cron schedule
+            }
+        }
+    }
 };
 
 // generate sitemap every 24 hours
@@ -42,9 +56,9 @@ cron.schedule('0 0 * * *', generateSitemapAndLog);
 
 let port = process.env.PORT || 3012;
 
-app.listen(port, () => {
+app.listen(port, async () => {
     console.log(`Server listening on port ${port}`);
 
-    generateSitemapAndLog();
+    await generateSitemapAndLog();
 
 });
