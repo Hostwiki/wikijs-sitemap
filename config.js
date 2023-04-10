@@ -1,8 +1,9 @@
-const isDocker = "is-docker";
 const fs = require("fs");
 require('dotenv').config();
 
-if (!isDocker){
+const isDockerized = fs.existsSync('/.dockerenv');
+
+if (!isDockerized){
     require('dotenv').config();
 }
 
