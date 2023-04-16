@@ -1,0 +1,46 @@
+version: "3"
+services:
+
+  db:
+    image: mariadb:10.7.8
+    environment:
+      MARIADB_DATABASE: wiki
+      MARIADB_USER: wikijs
+      MARIADB_ROOT_PASSWORD: wikijsrocks
+      MARIADB_PASSWORD: wikijsrocks
+    restart: unless-stopped
+    volumes:
+      - mariadb-data:/var/lib/mysql
+
+  wiki:
+    image: ghcr.io/requarks/wiki:2
+    depends_on:
+      - db
+    environment:
+      DB_TYPE: mariadb
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USER: wikijs
+      DB_PASS: wikijsrocks
+      DB_NAME: wiki
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+
+  wikijs-sitemap:
+    image:  hostwiki/wikijs-sitemap:latest
+    depends_on:
+      - db
+    environment:
+      DB_TYPE: mariadb
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USER: wikijs
+      DB_PASS: wikijsrocks
+      DB_NAME: wiki
+    restart: unless-stopped
+    ports:
+      - "3012:3012"
+
+volumes:
+  mariadb-data:
