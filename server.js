@@ -32,8 +32,8 @@ const sleep = (seconds) => new Promise((resolve) => setTimeout(resolve, seconds 
 const generateSitemapAndLog = async () => {
     const time = new Date().toISOString();
     let retryCount = 0;
-    let sleepSeconds = 30;
-    let retryLimit = 10;
+    let sleepSeconds = 10;
+    let retryLimit = 15;
 
     while (retryCount < retryLimit) {
         try {
@@ -43,9 +43,9 @@ const generateSitemapAndLog = async () => {
         } catch (error) {
             console.error(`[[${time}] Error generating sitemap (attempt ${retryCount + 1}/${retryLimit}): `, error);
             retryCount++;
-            if (retryCount < 10) {
+            if (retryCount < retryLimit) {
                 await sleep(sleepSeconds);
-                // if not successful after 10 tries, it will not run again until the next cron schedule
+                // if not successful after 15 tries, it will not run again until the next cron schedule
             }
         }
     }

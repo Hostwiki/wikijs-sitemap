@@ -16,8 +16,19 @@ if (process.env.DB_PASS_FILE) {
     }
 }
 
+let dbClient = '';
+
+switch (process.env.DB_TYPE.toLowerCase()) {
+    case 'mysql':
+    case 'mariadb':
+        dbClient = 'mysql2';
+        break;
+    default:
+        dbClient = 'pg';
+}
+
 const knexConfig = {
-    client: process.env.DB_TYPE.toString().toLowerCase() === 'mysql' ? 'mysql2' : 'pg',
+    client: dbClient,
     connection: {
         host: process.env.DB_HOST,
         port: process.env.DB_PORT,

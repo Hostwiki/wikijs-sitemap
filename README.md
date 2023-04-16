@@ -3,7 +3,7 @@
 This software allows you to generate a sitemap for your Wiki.js instance.  
 
 ~~Currently, it only supports Postgres, but support for MySQL will be added if requested or if I have the time.~~  
-It supports both Postgres and MySQL.
+It supports Postgres, MySQL and MariaDB.
 
 You can run it as a standalone Node.js program or within a Docker container.
 
@@ -21,7 +21,7 @@ The sitemap can be accessed at: https://testwiki.hostwiki.io/sitemap.xml
 - ~~Only supports postgres (need MYSQL or SQLite support? create an issue)~~
 
 #### Requirements
-- Wiki.js (with Postgres or MySQL)
+- Wiki.js (with Postgres, MySQL or MariaDB)
 - Reverse proxy (e.g Nginx, Apache)
 
 To use, you must be serving your Wiki.js instance over a reverse proxy server.
@@ -49,7 +49,7 @@ To keep the nodejs program running, you can use `pm2` or run it as a service.
 
 #### Docker
 Make sure to pass the correct environment variables.  
-The `DB_TYPE` accepts `postgres` and `mysql` as variables. It defaults to `postgres` if not set.  
+The `DB_TYPE` accepts `postgres`, `mysql` and `mariadb` as possible values. It defaults to `postgres` if not set.  
 You use `DB_PASS` or `DB_PASS_FILE` to set your database password.  
 ```
 -e DB_TYPE=postgres
