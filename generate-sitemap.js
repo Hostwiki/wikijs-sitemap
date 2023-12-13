@@ -12,14 +12,14 @@ async function generateSitemap() {
             .first();
 
         let hostname = '';
-        if (process.env.DB_TYPE.toLowerCase() === 'mariadb'){
+        if (process.env.DB_TYPE.toLowerCase() === 'mariadb') {
             hostname = JSON.parse(site_url.value).v;
         } else {
             hostname = site_url.value.v;
         }
 
         const pages = await db('pages')
-            .select('id', 'path', 'title', 'isPrivate', 'isPublished', 'updatedAt')
+            .select('id', 'localeCode', 'path', 'title', 'isPrivate', 'isPublished', 'updatedAt')
             .where({isPrivate: false, isPublished: true});
 
         if (pages.length > 0) {
@@ -28,7 +28,7 @@ async function generateSitemap() {
                 '<!-- Wiki.js sitemap generator by https://hostwiki.com -->\n';
 
             pages.forEach(function (page) {
-                const page_url = hostname + "/" + page.path;
+                const page_url = hostname + "/" + page.localeCode + "/" + page.path;
                 const last_update = page.updatedAt;
 
                 sitemap += '<url>\n' +

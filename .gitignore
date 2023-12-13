@@ -1,2 +1,5 @@
-node_modules
 .idea
+.env
+static/sitemap.xml
+node_modules
+
