@@ -1,6 +1,6 @@
 {
   "name": "wikijs-sitemap",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Sitemap for Wiki.js",
   "main": "server.js",
   "scripts": {

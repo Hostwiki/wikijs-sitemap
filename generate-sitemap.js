@@ -1,6 +1,7 @@
 const fs = require('fs');
 const knex = require("knex");
 const knexConfig = require('./config');
+const path = require("path");
 const db = knex(knexConfig);
 
 async function generateSitemap() {
@@ -39,7 +40,13 @@ async function generateSitemap() {
 
             sitemap += '</urlset>';
 
-            fs.writeFileSync('static/sitemap.xml', sitemap, 'utf-8');
+            const directoryPath = path.join(__dirname, 'static');
+
+            if (!fs.existsSync(directoryPath)){
+                fs.mkdirSync(directoryPath, { recursive: true });
+            }
+
+            fs.writeFileSync(path.join(directoryPath, 'sitemap.xml'), sitemap, 'utf-8');
         }
 
         await db.destroy();
