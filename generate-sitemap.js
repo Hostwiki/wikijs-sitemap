@@ -4,6 +4,15 @@ const knexConfig = require('./config');
 const path = require("path");
 const db = knex(knexConfig);
 
+function escapeXml(unsafe) {
+    return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&apos;");
+}
+
 async function generateSitemap() {
 
     try {
@@ -29,12 +38,12 @@ async function generateSitemap() {
                 '<!-- Wiki.js sitemap generator by https://hostwiki.com -->\n';
 
             pages.forEach(function (page) {
-                const page_url = hostname + "/" + page.localeCode + "/" + page.path;
+                const page_url = hostname + "/" + escapeXml(page.localeCode) + "/" + escapeXml(page.path);
                 const last_update = page.updatedAt;
 
                 sitemap += '<url>\n' +
-                    '    <loc>' + page_url + '</loc>\n' +
-                    '    <lastmod>' + last_update + '</lastmod>\n' +
+                    '    <loc>' + escapeXml(page_url) + '</loc>\n' +
+                    '    <lastmod>' + escapeXml(last_update) + '</lastmod>\n' +
                     '  </url>\n';
             });
 
