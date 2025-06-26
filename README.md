@@ -58,7 +58,33 @@ You use `DB_PASS` or `DB_PASS_FILE` to set your database password.
 -e DB_PASS=
 -e DB_USER=
 -e DB_NAME=
+-e EXCLUDED_PATHS=/private,/admin,/internal
 ```
+
+#### Path Exclusion
+You can exclude specific paths and their subpaths from the sitemap using the `EXCLUDED_PATHS` environment variable. This is useful for preventing private or restricted content from appearing in your sitemap.
+
+**Configuration:**
+- Set `EXCLUDED_PATHS` to a comma-separated list of paths to exclude
+- All pages under the specified paths (including subpaths) will be excluded
+- Paths can be specified with or without leading slashes
+
+**Examples:**
+```bash
+# Exclude single path
+EXCLUDED_PATHS=/private
+
+# Exclude multiple paths
+EXCLUDED_PATHS=/private,/admin,/internal
+
+# Exclude paths without leading slash (automatically normalized)
+EXCLUDED_PATHS=private,admin,internal
+```
+
+**Behavior:**
+- If you exclude `/private`, all pages like `/private/docs`, `/private/admin/users`, etc. will be excluded
+- The exclusion is applied after filtering for public and published pages
+- Excluded pages count is logged during sitemap generation
 
 ##### Docker Compose
 You can find a Docker Compose examples for Postgres and MySQL in the `example` directory.  
